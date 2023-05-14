@@ -3,6 +3,7 @@ const methodOverride = require('method-override')
 const mongoose = require('mongoose')
 require('dotenv').config()
 const breadController =require('./controllers/bread')
+const bakerController = require('./controllers/baker')
 
 const app = express()
 
@@ -21,9 +22,11 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 //routes
 app.use('/breads', breadController)
+app.use('/baker', bakerController)
 app.get('/', (req, res) => {
     res.send('Welcome to an Awesome App about Breads')
   })
+
 
 const PORT =process.env.PORT
 

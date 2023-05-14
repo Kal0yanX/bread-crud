@@ -1,25 +1,28 @@
 const express = require('express')
 const router = require('express').Router()
 const Bread = require('../models/bread')
+const Baker = require('../models/baker')
 
 // GET all the bread
 router.get('/', async (req, res) => {
     const bread = await Bread.find()
+    const bakers = await Baker.find()
     res.render('index', {
-        breads: bread
+        breads: bread,
+        bakers
     })
 })
 
-//NEW bread creation page + MAKE SURE IT'S ABOVE INDEX otherwise it will create an error
+//NEW bread creation page
 router.get('/new', async (req, res) => {
-    res.render('new')
+    const bakers = await Baker.find()
+    res.render('new', { bakers })
 })
 
 //GET bread by specific index
 router.get('/:id', async (req, res) => {
     const { id } = req.params
-    const bread = await Bread.findById(id)
-
+    const bread = await Bread.findById(id).populate('baker')
         res.render('show', {
             bread
     })
@@ -29,8 +32,10 @@ router.get('/:id', async (req, res) => {
 router.get('/:id/edit', async (req, res) => {
     const { id } = req.params
     const bread = await Bread.findById(id)
+    const bakers = await Baker.find()
         res.render('edit', {
-            bread
+            bread,
+            bakers
     })
 })
 
